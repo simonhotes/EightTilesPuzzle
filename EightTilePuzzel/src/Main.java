@@ -1,7 +1,5 @@
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import java.lang.Math;
@@ -41,12 +39,14 @@ public class Main {
         Node node2 = new Node(dummyGrid, hamming, goalGrid, 0);
         Node node3 = new Node(generateRandomGrid(), hamming, goalGrid, 0);
         Node node4 = new Node(generateRandomGrid(), hamming, goalGrid, 0);
+        Node node5 = new Node(generateRandomGrid(), hamming, goalGrid, 0);
 
         ArrayList<Node> openNodesList = new ArrayList<>();
         openNodesList.add(node1);
         openNodesList.add(node2);
         openNodesList.add(node3);
         openNodesList.add(node4);
+        openNodesList.add(node5);
 
         for(Node n: openNodesList) {
             System.out.println(""+n.costPrediction);
