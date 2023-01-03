@@ -29,48 +29,14 @@ public class Puzzle {
         */
 
     public static void main(String[] args) {
-        int[] goalGrid = {0,1,2,3,4,5,6,7,8};
-        boolean hamming = true;
-        ArrayList<Node> openNodesList = new ArrayList<>();
-        ArrayList<Node> deadNodesList = new ArrayList<>();
-
-
-        // Create initialGrid via function
-        int[] initialGrid = createInitialGrid();
-
-
-        Node initialNode = new Node(initialGrid, hamming, goalGrid,-1);
-        Node focusNode;
-        openNodesList.add(initialNode);
-
-        while (!(checkIfSolved(openNodesList))) {
-            focusNode = openNodesList
-                    .stream()
-                    .min(Comparator.comparing(Node::getMisplacedTiles))
-                    .get();
-
-            print(focusNode);
-            ArrayList<Node> tempNodesList;
-            tempNodesList = openNode(focusNode);
-
-            if (deadNodesList.size() > 0 && tempNodesList.size() > 0) {
-                tempNodesList = removeDuplicateNodes(deadNodesList,tempNodesList);
-            }
-            if (openNodesList.size() > 0 && tempNodesList.size() > 0) {
-                tempNodesList = removeDuplicateNodes(openNodesList,tempNodesList);
-            }
-
-            for (Node node : tempNodesList) {
-                openNodesList.add(node);
-            }
-
-            deadNodesList.add(focusNode);
-            openNodesList.remove(focusNode);
-
-            if(checkIfSolved(openNodesList)) {
-                openNodesList.stream().forEach(node -> print(node));
-            }
+        String calculationModeOfMisplacedTiles = "m";
+        long startTime = System.nanoTime();
+        for (int i = 0; i < 100; i++) {
+            execute(calculationModeOfMisplacedTiles);
         }
+        long elapsedTime = System.nanoTime() - startTime;
+        System.out.println("Done - Total execution time to create 100 random Puzzle and solving them in Milliseconds: "
+                + elapsedTime/1000000);
     }
 
     public static int[] generateRandomGrid() {
@@ -340,5 +306,49 @@ public class Puzzle {
             }
         }
         return cleanedList;
+    }
+    public static void execute(String calculationModeOfMisplacedTiles) {
+        int[] goalGrid = {0,1,2,3,4,5,6,7,8};
+        boolean hamming = calculationModeOfMisplacedTiles == "h" ? true : false;
+        ArrayList<Node> openNodesList = new ArrayList<>();
+        ArrayList<Node> deadNodesList = new ArrayList<>();
+
+
+        // Create initialGrid via function
+        int[] initialGrid = createInitialGrid();
+
+
+        Node initialNode = new Node(initialGrid, hamming, goalGrid,-1);
+        Node focusNode;
+        openNodesList.add(initialNode);
+
+        while (!(checkIfSolved(openNodesList))) {
+            focusNode = openNodesList
+                    .stream()
+                    .min(Comparator.comparing(Node::getMisplacedTiles))
+                    .get();
+
+            //print(focusNode);
+            ArrayList<Node> tempNodesList;
+            tempNodesList = openNode(focusNode);
+
+            if (deadNodesList.size() > 0 && tempNodesList.size() > 0) {
+                tempNodesList = removeDuplicateNodes(deadNodesList,tempNodesList);
+            }
+            if (openNodesList.size() > 0 && tempNodesList.size() > 0) {
+                tempNodesList = removeDuplicateNodes(openNodesList,tempNodesList);
+            }
+
+            for (Node node : tempNodesList) {
+                openNodesList.add(node);
+            }
+
+            deadNodesList.add(focusNode);
+            openNodesList.remove(focusNode);
+
+            /*if(checkIfSolved(openNodesList)) {
+                openNodesList.stream().forEach(node -> print(node));
+            }*/
+        }
     }
 }
