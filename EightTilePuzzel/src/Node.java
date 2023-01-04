@@ -7,14 +7,16 @@ public class Node {
     private int misplacedTiles;
     private int previousCost;
     private boolean hamming;
+    private int costPrediction;
 
     public Node(int[] grid, boolean hamming, int[] goalGrid, int previousCost) {
         this.grid = grid;
         this.goalGrid = goalGrid;
         this.hamming = hamming;
-        this.misplacedTiles = this.hamming ? countMisplacedTilesHamming(this.grid, this.goalGrid) : countMisplacedByPositionManhattan(this.grid);
         this.previousCost = (previousCost+1);
+        this.misplacedTiles = this.hamming ? countMisplacedTilesHamming(this.grid, this.goalGrid) : countMisplacedByPositionManhattan(this.grid);
         this.gridWidth = this.grid.length;
+        this.costPrediction = (this.misplacedTiles+this.previousCost);
     }
 
     public int[] getGrid() {
@@ -39,6 +41,10 @@ public class Node {
 
     public boolean isHamming() {
         return hamming;
+    }
+
+    public int getCostPrediction() {
+        return costPrediction;
     }
 
     public static int countMisplacedTilesHamming(int[] grid, int[] goalGrid) {

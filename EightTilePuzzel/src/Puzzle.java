@@ -31,12 +31,15 @@ public class Puzzle {
     public static void main(String[] args) {
         String calculationModeOfMisplacedTiles = "m";
         long startTime = System.nanoTime();
-        for (int i = 0; i < 100; i++) {
+        int numberOfPuzzlesToSolve = 20;
+        for (int i = 0; i < numberOfPuzzlesToSolve; i++) {
             execute(calculationModeOfMisplacedTiles);
         }
         long elapsedTime = System.nanoTime() - startTime;
-        System.out.println("Done - Total execution time to create 100 random Puzzle and solving them in Milliseconds: "
+        System.out.println("Done - Total execution time to create "+numberOfPuzzlesToSolve+" random Puzzle and solving them in Milliseconds: "
                 + elapsedTime/1000000);
+
+        //execute(calculationModeOfMisplacedTiles);
     }
 
     public static int[] generateRandomGrid() {
@@ -325,7 +328,7 @@ public class Puzzle {
         while (!(checkIfSolved(openNodesList))) {
             focusNode = openNodesList
                     .stream()
-                    .min(Comparator.comparing(Node::getMisplacedTiles))
+                    .min(Comparator.comparing(Node::getCostPrediction))
                     .get();
 
             //print(focusNode);
@@ -346,9 +349,16 @@ public class Puzzle {
             deadNodesList.add(focusNode);
             openNodesList.remove(focusNode);
 
-            /*if(checkIfSolved(openNodesList)) {
-                openNodesList.stream().forEach(node -> print(node));
-            }*/
+            if(checkIfSolved(openNodesList)) {
+                System.out.println("--------------------------");
+                System.out.println("");
+                System.out.println("OpenNodeListSize: "+openNodesList.size());
+                System.out.println("DeadNodeListSize: "+deadNodesList.size());
+                System.out.println("TempNodeListSize: "+tempNodesList.size());
+                System.out.println("");
+                System.out.println("--------------------------");
+                //openNodesList.stream().forEach(node -> print(node));
+            }
         }
     }
 }
