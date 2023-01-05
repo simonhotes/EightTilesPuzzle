@@ -13,9 +13,9 @@ public class Node {
         this.grid = grid;
         this.goalGrid = goalGrid;
         this.hamming = hamming;
+        this.gridWidth = this.grid.length;
         this.previousCost = (previousCost+1);
         this.misplacedTiles = this.hamming ? countMisplacedTilesHamming(this.grid, this.goalGrid) : countMisplacedByPositionManhattan(this.grid);
-        this.gridWidth = this.grid.length;
         this.costPrediction = (this.misplacedTiles+this.previousCost);
     }
 

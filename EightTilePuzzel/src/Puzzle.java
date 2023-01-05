@@ -38,8 +38,6 @@ public class Puzzle {
         long elapsedTime = System.nanoTime() - startTime;
         System.out.println("Done - Total execution time to create "+numberOfPuzzlesToSolve+" random Puzzle and solving them in Milliseconds: "
                 + elapsedTime/1000000);
-
-        //execute(calculationModeOfMisplacedTiles);
     }
 
     public static int[] generateRandomGrid() {
@@ -335,12 +333,20 @@ public class Puzzle {
             ArrayList<Node> tempNodesList;
             tempNodesList = openNode(focusNode);
 
+            ArrayList<Node> dead_tempNodesList = (ArrayList<Node>) tempNodesList.stream().collect(Collectors.toList());
+            ArrayList<Node> open_tempNodesList = (ArrayList<Node>) tempNodesList.stream().collect(Collectors.toList());
+
             if (deadNodesList.size() > 0 && tempNodesList.size() > 0) {
-                tempNodesList = removeDuplicateNodes(deadNodesList,tempNodesList);
+                dead_tempNodesList = removeDuplicateNodes(deadNodesList,dead_tempNodesList);
             }
             if (openNodesList.size() > 0 && tempNodesList.size() > 0) {
-                tempNodesList = removeDuplicateNodes(openNodesList,tempNodesList);
+                open_tempNodesList = removeDuplicateNodes(openNodesList,open_tempNodesList);
             }
+
+            if (dead_tempNodesList.size() > 0 && open_tempNodesList.size() > 0) {
+                tempNodesList = removeDuplicateNodes(dead_tempNodesList,open_tempNodesList);
+            }
+
 
             for (Node node : tempNodesList) {
                 openNodesList.add(node);
@@ -348,6 +354,14 @@ public class Puzzle {
 
             deadNodesList.add(focusNode);
             openNodesList.remove(focusNode);
+
+            /*if (deadNodesList.size() > 1000) {
+                System.out.println("Stop");
+            }
+
+            if (openNodesList.size() > 1000) {
+                System.out.println("Stop");
+            }*/
 
             if(checkIfSolved(openNodesList)) {
                 System.out.println("--------------------------");
