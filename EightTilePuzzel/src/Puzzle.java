@@ -31,7 +31,7 @@ public class Puzzle {
     public static void main(String[] args) {
         String calculationModeOfMisplacedTiles = "m";
         long startTime = System.nanoTime();
-        int numberOfPuzzlesToSolve = 20;
+        int numberOfPuzzlesToSolve = 100;
         for (int i = 0; i < numberOfPuzzlesToSolve; i++) {
             execute(calculationModeOfMisplacedTiles);
         }
@@ -297,11 +297,16 @@ public class Puzzle {
         }
         return true;
     }
-    public static ArrayList<Node> removeDuplicateNodes(ArrayList<Node> listToCheckWith, ArrayList<Node> listToRemoveNodesFrom) {
+    public static ArrayList<Node> removeDuplicateNodes(ArrayList<Node> listToCheckWith_1, ArrayList<Node> listToCheckWith_2, ArrayList<Node> listToRemoveNodesFrom) {
         ArrayList<Node> cleanedList = (ArrayList<Node>) listToRemoveNodesFrom.stream().collect(Collectors.toList());
         for (Node listToRemoveNodesFromNode : listToRemoveNodesFrom) {
-            for (Node listToCheckWithNode : listToCheckWith) {
-                if (checkIfGridsAreEqual(listToCheckWithNode.getGrid(), listToRemoveNodesFromNode.getGrid())) {
+            for (Node listToCheckWithNode_1 : listToCheckWith_1) {
+                if (checkIfGridsAreEqual(listToCheckWithNode_1.getGrid(), listToRemoveNodesFromNode.getGrid())) {
+                    cleanedList.remove(listToRemoveNodesFromNode);
+                }
+            }
+            for (Node listToCheckWithNode_2 : listToCheckWith_2) {
+                if (checkIfGridsAreEqual(listToCheckWithNode_2.getGrid(), listToRemoveNodesFromNode.getGrid())) {
                     cleanedList.remove(listToRemoveNodesFromNode);
                 }
             }
@@ -333,22 +338,9 @@ public class Puzzle {
             ArrayList<Node> tempNodesList;
             tempNodesList = openNode(focusNode);
 
-            ArrayList<Node> dead_tempNodesList = (ArrayList<Node>) tempNodesList.stream().collect(Collectors.toList());
-            ArrayList<Node> open_tempNodesList = (ArrayList<Node>) tempNodesList.stream().collect(Collectors.toList());
+            ArrayList<Node> helper = removeDuplicateNodes(deadNodesList,openNodesList, tempNodesList);
 
-            if (deadNodesList.size() > 0 && tempNodesList.size() > 0) {
-                dead_tempNodesList = removeDuplicateNodes(deadNodesList,dead_tempNodesList);
-            }
-            if (openNodesList.size() > 0 && tempNodesList.size() > 0) {
-                open_tempNodesList = removeDuplicateNodes(openNodesList,open_tempNodesList);
-            }
-
-            if (dead_tempNodesList.size() > 0 && open_tempNodesList.size() > 0) {
-                tempNodesList = removeDuplicateNodes(dead_tempNodesList,open_tempNodesList);
-            }
-
-
-            for (Node node : tempNodesList) {
+            for (Node node : helper) {
                 openNodesList.add(node);
             }
 
@@ -369,6 +361,8 @@ public class Puzzle {
                 System.out.println("OpenNodeListSize: "+openNodesList.size());
                 System.out.println("DeadNodeListSize: "+deadNodesList.size());
                 System.out.println("TempNodeListSize: "+tempNodesList.size());
+                System.out.println("    Initial Grid: ");
+                for(int i=0;i<9;i++) {System.out.print(" "+initialGrid[i]);}
                 System.out.println("");
                 System.out.println("--------------------------");
                 //openNodesList.stream().forEach(node -> print(node));
