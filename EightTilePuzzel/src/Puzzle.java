@@ -29,7 +29,7 @@ public class Puzzle {
         */
 
     public static void main(String[] args) {
-        String calculationModeOfMisplacedTiles = "h";
+        String calculationModeOfMisplacedTiles = "m";
         long startTime = System.nanoTime();
         int numberOfPuzzlesToSolve = 100;
         for (int i = 0; i < numberOfPuzzlesToSolve; i++) {
