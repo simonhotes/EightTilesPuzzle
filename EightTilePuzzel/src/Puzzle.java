@@ -29,10 +29,11 @@ public class Puzzle {
         */
 
     public static void main(String[] args) {
-        String calculationModeOfMisplacedTiles = "m";
+        String calculationModeOfMisplacedTiles = "h";
         long startTime = System.nanoTime();
         int numberOfPuzzlesToSolve = 100;
         for (int i = 0; i < numberOfPuzzlesToSolve; i++) {
+            System.out.println("Puzzle No.: "+i);
             execute(calculationModeOfMisplacedTiles);
         }
         long elapsedTime = System.nanoTime() - startTime;
@@ -89,14 +90,17 @@ public class Puzzle {
         return false;
     }
     public static void print(Node node) {
+        /*
         System.out.println("");
         System.out.println(""+node.getGrid()[0]+" "+node.getGrid()[1]+" "+node.getGrid()[2]);
         System.out.println(""+node.getGrid()[3]+" "+node.getGrid()[4]+" "+node.getGrid()[5]);
         System.out.println(""+node.getGrid()[6]+" "+node.getGrid()[7]+" "+node.getGrid()[8]);
+        */
 
         System.out.println("");
         System.out.print(node.isHamming() ? "Costprediction Hamming: " : "Costprediction Manhattan: ");
-        System.out.print(""+ node.getMisplacedTiles());
+        System.out.println(""+ node.getMisplacedTiles());
+        System.out.println("Depth/PreviousCosts: "+ node.getPreviousCost());
 
     }
     public static boolean checkIfSolved(ArrayList<Node> list) {
@@ -311,10 +315,11 @@ public class Puzzle {
                 }
             }
         }
+
         return cleanedList;
     }
     public static void execute(String calculationModeOfMisplacedTiles) {
-        int[] goalGrid = {0,1,2,3,4,5,6,7,8};
+        int[] goalGrid = {1,2,3,4,5,6,7,8,0};
         boolean hamming = calculationModeOfMisplacedTiles == "h" ? true : false;
         ArrayList<Node> openNodesList = new ArrayList<>();
         ArrayList<Node> deadNodesList = new ArrayList<>();
@@ -327,45 +332,47 @@ public class Puzzle {
         Node initialNode = new Node(initialGrid, hamming, goalGrid,-1);
         Node focusNode;
         openNodesList.add(initialNode);
-
+        int numberOfIterationsToSolvePuzzle = 0;
         while (!(checkIfSolved(openNodesList))) {
+            numberOfIterationsToSolvePuzzle++;
             focusNode = openNodesList
                     .stream()
                     .min(Comparator.comparing(Node::getCostPrediction))
                     .get();
 
-            //print(focusNode);
             ArrayList<Node> tempNodesList;
             tempNodesList = openNode(focusNode);
+            ArrayList<Node> helper = new ArrayList<>();
 
-            ArrayList<Node> helper = removeDuplicateNodes(deadNodesList,openNodesList, tempNodesList);
+            if (deadNodesList.size() > 0 || openNodesList.size() > 0) {
+                helper = removeDuplicateNodes(deadNodesList,openNodesList, tempNodesList);
+            }
 
-            for (Node node : helper) {
-                openNodesList.add(node);
+
+            if (helper.size() > 0) {
+                for (Node node : helper) {
+                    openNodesList.add(node);
+                }
             }
 
             deadNodesList.add(focusNode);
             openNodesList.remove(focusNode);
 
-            /*if (deadNodesList.size() > 1000) {
-                System.out.println("Stop");
-            }
-
-            if (openNodesList.size() > 1000) {
-                System.out.println("Stop");
-            }*/
-
             if(checkIfSolved(openNodesList)) {
-                System.out.println("--------------------------");
+                System.out.print("--------------------------");
                 System.out.println("");
                 System.out.println("OpenNodeListSize: "+openNodesList.size());
                 System.out.println("DeadNodeListSize: "+deadNodesList.size());
-                System.out.println("TempNodeListSize: "+tempNodesList.size());
-                System.out.println("    Initial Grid: ");
-                for(int i=0;i<9;i++) {System.out.print(" "+initialGrid[i]);}
+                System.out.print("    Initial Grid: ");
+                for(int i=0;i<9;i++) {System.out.print(""+initialGrid[i]);}
                 System.out.println("");
+                for(Node n : openNodesList) {
+                    if(n.getMisplacedTiles() == 0) {
+                        Node solvedNode = n;
+                        print(solvedNode);
+                    }
+                }
                 System.out.println("--------------------------");
-                //openNodesList.stream().forEach(node -> print(node));
             }
         }
     }

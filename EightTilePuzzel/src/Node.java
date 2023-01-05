@@ -59,6 +59,8 @@ public class Node {
     public static int countMisplacedByPositionManhattan(int[] grid) {
         int numberMisplacedByPosition = 0;
         int tempTwoDimensionalGrid[][] = {{grid[0],grid[1],grid[2]},{grid[3],grid[4],grid[5]},{grid[6],grid[7],grid[8]}};
+
+        // Manhatten Misplaced Tiles Calculation with Solution-Grid where empty tile is at 0,0
         for(int i = 0; i < 3; i++) {
             for(int j = 0; j < 3; j++) {
                 if(tempTwoDimensionalGrid[i][j] == 1) {numberMisplacedByPosition += Math.abs(1-j);numberMisplacedByPosition += Math.abs(0-i);}
@@ -72,6 +74,23 @@ public class Node {
                 if(tempTwoDimensionalGrid[i][j] == 0) {numberMisplacedByPosition += 0;}
             }
         }
+
+        // Manhatten Misplaced Tiles Calculation with Solution-Grid where empty tile is at 2,2
+        /*
+        for(int i = 0; i < 3; i++) {
+            for(int j = 0; j < 3; j++) {
+                if(tempTwoDimensionalGrid[i][j] == 1) {numberMisplacedByPosition += Math.abs(0-j);numberMisplacedByPosition += Math.abs(0-i);}
+                if(tempTwoDimensionalGrid[i][j] == 2) {numberMisplacedByPosition += Math.abs(1-j);numberMisplacedByPosition += Math.abs(0-i);}
+                if(tempTwoDimensionalGrid[i][j] == 3) {numberMisplacedByPosition += Math.abs(2-j);numberMisplacedByPosition += Math.abs(0-i);}
+                if(tempTwoDimensionalGrid[i][j] == 4) {numberMisplacedByPosition += Math.abs(0-j);numberMisplacedByPosition += Math.abs(1-i);}
+                if(tempTwoDimensionalGrid[i][j] == 5) {numberMisplacedByPosition += Math.abs(1-j);numberMisplacedByPosition += Math.abs(1-i);}
+                if(tempTwoDimensionalGrid[i][j] == 6) {numberMisplacedByPosition += Math.abs(2-j);numberMisplacedByPosition += Math.abs(1-i);}
+                if(tempTwoDimensionalGrid[i][j] == 7) {numberMisplacedByPosition += Math.abs(0-j);numberMisplacedByPosition += Math.abs(2-i);}
+                if(tempTwoDimensionalGrid[i][j] == 8) {numberMisplacedByPosition += Math.abs(1-j);numberMisplacedByPosition += Math.abs(2-i);}
+                if(tempTwoDimensionalGrid[i][j] == 0) {numberMisplacedByPosition += 0;}
+            }
+        }
+        */
         return numberMisplacedByPosition;
     }
 }
