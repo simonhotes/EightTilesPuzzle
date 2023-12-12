@@ -29,9 +29,9 @@ public class Puzzle {
         */
 
     public static void main(String[] args) {
-        String calculationModeOfMisplacedTiles = "m";
+        String calculationModeOfMisplacedTiles = "h";
         long startTime = System.nanoTime();
-        int numberOfPuzzlesToSolve = 100;
+        int numberOfPuzzlesToSolve = 10;
         for (int i = 0; i < numberOfPuzzlesToSolve; i++) {
             System.out.println("Puzzle No.: "+i);
             execute(calculationModeOfMisplacedTiles);
@@ -319,7 +319,7 @@ public class Puzzle {
         return cleanedList;
     }
     public static void execute(String calculationModeOfMisplacedTiles) {
-        int[] goalGrid = {1,2,3,4,5,6,7,8,0};
+        int[] goalGrid = {0,1,2,3,4,5,6,7,8};
         boolean hamming = calculationModeOfMisplacedTiles == "h" ? true : false;
         ArrayList<Node> openNodesList = new ArrayList<>();
         ArrayList<Node> deadNodesList = new ArrayList<>();
